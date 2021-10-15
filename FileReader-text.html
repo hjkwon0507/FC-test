@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<input>
+    <input type="file" onchange="readfile(this.files[0])"></input>
+    <pre id="output"></pre>
+
+    <script>
+        // 지정한 텍스트 파일을 읽은 다음, 아래의 <pre> 요소에 출력한다.
+        function readfile(f) {
+            var reader = new FileReader(); // FileReader 객체를 생성한다.
+            reader.readAsText(f); // 파일을 읽어 들인다.
+            reader.onload = function() { // 이벤트 핸들러를 정의한다.
+                var text = reader.result; // 파일의 내용
+                var out = document.getElementById("output"); // output 요소를 가져온다.
+                out.innerHTML = ""; // 요소의 내용을 비운다.
+                out.appendChild(document.createTextNode(text)); // 파일 내용을 출력한다.
+            }
+            reader.onerror = function(e) { // 뭔가 잘못되었다면
+                console.log("Error", e); // 로그로 기록한다.
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 300px;
+        }
+        #droptarget {
+            border: solid black 2px;
+            width: 200px;
+            height: 200px;
+        }
+        #droptarget.active {
+            border: solid red 4px;
+        }
+    </style>
+</head>
+<body>
+    <div id="droptarget">여기에 파일을 드롭하십시오.</div>
+
+    <script>
+        var getBlobURL = (window.URL && URL.createObjectURL.bind(URL)) ||
+            (window.webkitURL && webkitURL.createObjectURL.bind(webkitURL)) ||
+            window.createObjectURL;
+        
+        // 문서가 로드되면, droptarget 요소에 이벤트 핸들러를 추가하여, 파일 드롭을 처리할 수 있게 한다.
+        window.onload = function() {
+            // 핸들러를 추가할 요소를 찾는다.
+            var droptarget = document.getElementById("droptarget");
+
+            // 사용자가 droptarget 위에서 파일을 드래그하기 시작하면, droptarget을 돋보이게 한다.
+            droptarget.ondragenter = function(e) {
+                // 파일이 아닌 다른 것이 드래그 되면 무시한다.
+                var types = e.dataTransfer.types;
+                if (!types ||
+                        (types.contains && types.contains("Files")) ||
+                        (types.indexOf && types.indexOf("Files") != -1)) {
+                    droptarget.classList.add("active"); // droptarget을 돋보이게 한다.
+                    return false;
+                        }
+            };
+            
+            // 사용자가 드래그 객체를 드롭 영역 밖으로 이동시키면, 돋보이지 않게 한다.
+            droptarget.ondragover = function() { 
+                droptarget.classList.remove("active");
+            };
+
+            // 이 핸들러는 브라우저에게 드래그 중임을 알리는 역할을 한다.
+            droptarget.ondragover = function(e) { return false; };
+
+            // 사용자가 드롭 영역에 파일을 놓으면, 해당 파일의 URL을 얻어서 썸네일을 출력한다.
+            droptarget.ondrop = function(e) {
+                var files = e.dataTransfer.files; // 드롭된 파일 목록
+                for(var i=0; i < files.length; i++) { // 전체 목록을 순회한다.
+                    var type = files[i].type;
+                    if (type.substring(0,6) !== "image/") // 이미지가 아닌 것은 무시한다.
+                        continue;
+                    var img = document.createElement("img"); // <img> 요소를 생성한다.
+                    img.src = getBlobURL(files[i]); // Blob URL을 <img>에 사용한다.
+                    img.onload = function() { // 이미지가 로드되면
+                        this.width = 100; // 이미지의 크기를 조정하고
+                        document.body.appendChild(this); // 문서에 삽입한다.
+                        revokeBlobURL(this.src); // 메모리 누수를 방지한다.
+                    }
+                }
+
+                droptarget.classList.remove("active"); // droptarget을 돋보이지 않게 한다.
+                return false; // 드롭이 처리되었다.
+            }
+        };
+    </script>
+</body>
+</html>

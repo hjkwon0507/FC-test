@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Video Subtitle</title>
+</head>
+
+<body>
+
+	<video controls id="output-video">
+		<source src="./working.mp4" type="video/mp4">
+		<track id="caption-track" kind="subtitles" srclang="ko" label="Korean" default />
+	</video>
+  
+  <a id="save" href="" download="download.vtt">download copy</a>
+	<script>
+	
+		// var subtitles=`WEBVT`
+		// 00:00.000 -->00:01.000
+		// <v Roger Bingham>첫번째 자막 가나다라
+		// 00:01.000 --> 00:02.000
+		// <v Roger Bingham>두번째 자막 마바사아`
+	
+		var dynamicSubtitle=`WEBVTT`
+		var data=[
+			{
+				from:"00:00.000",
+				to:"00:03.000",
+				text:"<v Roger Bingham>첫번째 자막 가나다라"
+			},
+			
+			{
+				from:"00:03.000",
+				to:"00:05.000",
+				text:"<v Roger Bingham>두번째 자막 마바사아"
+			}
+		]
+		
+		data.map((item)=>{
+      dynamicSubtitle=dynamicSubtitle+`\n ${item.from} --> ${item.to} \n ${item.text} \n`
+		})
+		
+		const trackBlob=new Blob ([dynamicSubtitle],{
+		
+			type:"text/plain;charset=utf=8"
+		
+		});
+		
+		const trackUrl=URL.createObjectURL(trackBlob);
+		
+		document.querySelector("#caption-track").src=trackUrl;
+    console.log(trackUrl)
+
+    document.querySelector("#save").href=trackUrl;
+    
+	</script>
+</body>
+</html>
