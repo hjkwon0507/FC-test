@@ -6,30 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="./index.css" type="text/css">
+    <link rel="stylesheet" href="./index.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="root">
     <div class="input_box" id="input_box">
         <div class="add-task">
-        <input type="text" autocomplete="off" placeholder="자막 추가" maxlength="30" v-model="tasks.name" @keyup.enter="new_cc" class="cc_input">
+        <input type="text" autocomplete="off" placeholder="자막 추가" v-model="tasks.name" @keyup.enter="new_cc" class="cc_input">
         <input type="submit" value="" class="submit_cc" @click="new_cc" title="Add cc">
         </div>
         <ul class="task-list">
             <li class="task-list-item" v-for="task in tasks">
               <label class="task-list-item-label">
-                <span class="cc_name">{{task.name}}</span>
-                <!--range bar-->
-                <div class="wrapper">
-                    <div class="container">
-                        <div class="slider-track"></div>
-                        <input type="range" min="0" max="60" value="0" r id="slider-1" oninput="slideOne()">
-                        <input type="range" min="0" max="60" value="3" id="slider-2" oninput="slideTwo()">
-                    </div>
-                    <div class="values">
-                        <span id="range1">0</span>
-                        <span id="range2">3</span>
-                    </div>
+                <span>{{task.name}}</span>
+                <div id="timeSelect">
+                    <input class="time" id="time1" type="text" value="00" name="">:<input class="time" id="time2" type="text" value="00" name="">
+                    to
+                    <input class="time" id="time3" type="text" value="00" name="">:<input class="time" id="time4" type="text" value="00" name="">
                 </div>
               </label>
               <span @click="delItem(task)" class="delete-btn" title="Delete Task">{{task.del}}</span>
@@ -37,8 +31,9 @@
           </ul>
         <!-- <input type="button" value="자막 적용" class="input_cc" @click="input_cc"> -->
     </div>
-    <video controls style="width: 700px; height:400px;">
-        <source src="./jaerong.mp4" type="video/mp4">
+    <input type="file" name="file" onchange="selectedVideo(this);">
+    <video id="video" controls style="width: 600px; height:400px;">
+        <source id="source" type="video/mp4">
         <track id="caption-track" kind="subtitles" srclang="ko" label="Korean" default />
     </video>
     <a id="save" href="" download="download.vtt">download copy</a>
