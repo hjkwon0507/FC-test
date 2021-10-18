@@ -6,29 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <link rel="stylesheet" href="./index.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="./index.css" type="text/css">
 </head>
 <body>
     <div id="root">
     <div class="input_box" id="input_box">
         <div class="add-task">
-        <input type="text" autocomplete="off" placeholder="자막 추가" v-model="tasks.name" @keyup.enter="new_cc" class="cc_input">
+        <input type="text" autocomplete="off" placeholder="자막 추가" maxlength="30" v-model="tasks.name" @keyup.enter="new_cc" class="cc_input">
         <input type="submit" value="" class="submit_cc" @click="new_cc" title="Add cc">
         </div>
         <ul class="task-list">
             <li class="task-list-item" v-for="task in tasks">
               <label class="task-list-item-label">
-                <span>{{task.name}}</span>
+                <span class="cc_name">{{task.name}}</span>
+                <!--range bar-->
                 <div class="wrapper">
-                    <div class="values">
-                        <span id="range1">0</span>
-                        <span id="range2">3</span>
-                    </div>
                     <div class="container">
                         <div class="slider-track"></div>
                         <input type="range" min="0" max="60" value="0" r id="slider-1" oninput="slideOne()">
                         <input type="range" min="0" max="60" value="3" id="slider-2" oninput="slideTwo()">
+                    </div>
+                    <div class="values">
+                        <span id="range1">0</span>
+                        <span id="range2">3</span>
                     </div>
                 </div>
               </label>
@@ -37,7 +37,7 @@
           </ul>
         <!-- <input type="button" value="자막 적용" class="input_cc" @click="input_cc"> -->
     </div>
-    <video controls style="width: 600px; height:400px;">
+    <video controls style="width: 700px; height:400px;">
         <source src="./jaerong.mp4" type="video/mp4">
         <track id="caption-track" kind="subtitles" srclang="ko" label="Korean" default />
     </video>
